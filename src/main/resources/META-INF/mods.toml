@@ -7,9 +7,8 @@ modId="fdmod"
 version="1.0.0"
 displayName="FD Mod"
 
-authors="slava"
-
-description='''My first mod'''
+authors="faiden-dev"
+description='''Mod where I add whatever I want.'''
 
 [[dependencies.fdmod]]
 modId="forge"
