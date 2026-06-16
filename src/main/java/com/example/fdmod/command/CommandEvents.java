@@ -10,8 +10,9 @@ import com.example.fdmod.Fdmod;
 
 public class CommandEvents {
     @SubscribeEvent
-    // Register the command to spawn a PlayerBotEntity
+    // Register the command
     public static void onRegisterCommands(RegisterCommandsEvent event) {
-        SpawnBotCommand.register(event.getDispatcher());
+        bSpawnCommand.register(event.getDispatcher());
+        BotCommand.register(event.getDispatcher());
     }
 }

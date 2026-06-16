@@ -8,11 +8,11 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.server.level.ServerPlayer;
 
-public class SpawnBotCommand {
+public class bSpawnCommand {
     // Registercommand to spawn a PlayerBotEntity
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(
-            Commands.literal("s")
+            Commands.literal("bSpawn")
 
                 .executes(context -> {
                     // Get the player who executed the command

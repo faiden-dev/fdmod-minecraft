@@ -11,11 +11,12 @@ public class Fdmod {
     public static final String MODID = "fdmod";
 
     // Constructor for the mod class
-    public Fdmod() {
-        IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
+    public Fdmod(FMLJavaModLoadingContext context) {
+        IEventBus eventBus = context.getModEventBus();
         
         // Register mod components
         ModItems.register(eventBus);
         ModEntities.register(eventBus);
     }
+
 }
