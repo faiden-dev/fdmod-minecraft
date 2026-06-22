@@ -6,6 +6,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.pathfinder.PathType;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.EntityType;
@@ -13,12 +14,24 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.OpenDoorGoal;
 
 
 public class PlayerBotEntity extends PathfinderMob {
     // Constructor for the PlayerBotEntity
     public PlayerBotEntity(EntityType<? extends PathfinderMob> entityType, Level level) {
         super(entityType, level);
+        
+        // Add goals for the bot's behavior
+        this.goalSelector.addGoal(1, new OpenDoorGoal(this, false));
+        this.goalSelector.addGoal(0, new FloatGoal(this));
+        this.getNavigation().setCanFloat(true);
+        
+        // Set pathfinding malus for different block types to influence navigation behavior
+        this.setPathfindingMalus(PathType.LAVA, -1.0F);
+        this.setPathfindingMalus(PathType.DANGER_FIRE, 20.0F);
+        this.setPathfindingMalus(PathType.DAMAGE_CAUTIOUS, 1.0F);
     }
 
     // Define attributes for the PlayerBotEntity
@@ -26,7 +39,8 @@ public class PlayerBotEntity extends PathfinderMob {
         return PathfinderMob.createMobAttributes()
             .add(Attributes.MAX_HEALTH, 20.0D)
             .add(Attributes.MOVEMENT_SPEED, 0.25D)
-            .add(Attributes.ATTACK_DAMAGE, 4.0D);
+            .add(Attributes.ATTACK_DAMAGE, 4.0D)
+            .add(Attributes.FOLLOW_RANGE, 32.0D);
     }
 
 
@@ -69,13 +83,14 @@ public class PlayerBotEntity extends PathfinderMob {
         if (mode == BotMode.STOP) {
             this.getNavigation().stop();
             this.getMoveControl().setWantedPosition(this.getX(), this.getY(), this.getZ(), 0.0D);
+            this.navigationDelay = 0;
         }
         // Find the nearest player and move towards them
         else if (mode == BotMode.FOLLOW) {
             Player player = this.level().getNearestPlayer(this, 128);
 
             if (player != null) {
-                this.getNavigation().moveTo(
+                moveToTarget(
                     player.getX(),
                     player.getY(),
                     player.getZ(),
@@ -86,7 +101,7 @@ public class PlayerBotEntity extends PathfinderMob {
         // Attack the nearest mob
         else if (mode == BotMode.ATTACK) {
         var nearestMob = this.level()
-            .getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(128))
+            .getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(64))
             .stream()
             .filter(entity ->
                 entity != this &&
@@ -105,7 +120,7 @@ public class PlayerBotEntity extends PathfinderMob {
             if (nearestMob != null) {
                 this.getLookControl().setLookAt(nearestMob);
 
-                this.getNavigation().moveTo(
+                moveToTarget(
                     nearestMob.getX(),
                     nearestMob.getY(),
                     nearestMob.getZ(),
@@ -140,5 +155,21 @@ public class PlayerBotEntity extends PathfinderMob {
 
         // Update preliminary mode to current mode at the end of the tick
         modePreliminary = mode;
+    }
+
+    
+    // Delay counter for navigation updates
+    private int navigationDelay = 0;
+
+    // Function to move the bot towards a target position with a specified speed
+    private void moveToTarget(double x, double y, double z, double speed) {
+        if (--this.navigationDelay <= 0) {
+            this.navigationDelay = 10; 
+
+            net.minecraft.world.level.pathfinder.Path path = this.getNavigation().createPath(x, y, z, 0);
+            if (path != null) {
+                this.getNavigation().moveTo(path, speed);
+            }
+        }
     }
 }
