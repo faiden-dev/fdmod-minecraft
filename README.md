@@ -15,8 +15,23 @@ faiden-dev
 GitHub: https://github.com/faiden-dev
 
 
+<br>
 
-## Mod Commands
+## Mod items
+
+### 67 Sword (sword_67)
+
+- strong and fast custom sword
+
+### Bot Spawn (bot_spawn)
+
+- spawns a bot (replacing /bSpawn command)
+
+
+
+<br>
+
+## Mod commands
 
 ### /bSpawn
 
