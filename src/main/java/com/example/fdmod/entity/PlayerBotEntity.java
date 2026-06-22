@@ -60,7 +60,7 @@ public class PlayerBotEntity extends PathfinderMob {
     private UUID ownerUUID;
 
     // Set the owner of the bot using the player's UUID
-    public void setOwner(ServerPlayer player) {
+    public void setOwner(Player player) {
         this.ownerUUID = player.getUUID();
     }
 
