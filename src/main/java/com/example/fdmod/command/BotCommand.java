@@ -50,6 +50,23 @@ public class BotCommand {
                     })
                 )
 
+                // Stop the bot from following
+                .then(Commands.literal("attack")
+                    .executes(ctx -> {
+                        CommandSourceStack source = ctx.getSource();
+                        Level level = source.getLevel();
+
+                        var bots = level.getEntitiesOfClass(PlayerBotEntity.class,
+                                source.getPlayerOrException().getBoundingBox().inflate(64));
+
+                        for (PlayerBotEntity bot : bots) {
+                            bot.setMode(BotMode.ATTACK);
+                        }
+
+                        return 1;
+                    })
+                )
+
         );
     }
 }

@@ -29,6 +29,9 @@ public class bSpawnCommand {
                         player.getYRot(),
                         player.getXRot()
                     );
+
+                    // Set the bot's owner to the player
+                    bot.setOwner(player);
     
                     // Add the bot entity to the world
                     player.level().addFreshEntity(bot);

@@ -26,3 +26,11 @@ GitHub: https://github.com/faiden-dev
 
 - follow - Bot starts chasing the nearest player and follows them.
 - stop - Bot sends a chat message and stops all movement.
+- attack - Bot attacks the nearest mob.
+
+### Commands list
+
+- /bSpawn
+- /bMode follow
+- /bMode stop
+- /bMode attack
