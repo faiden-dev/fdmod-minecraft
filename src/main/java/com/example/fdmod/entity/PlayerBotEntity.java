@@ -3,10 +3,14 @@ package com.example.fdmod.entity;
 import java.util.UUID;
 
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.pathfinder.PathType;
+
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.EntityType;
@@ -41,6 +45,43 @@ public class PlayerBotEntity extends PathfinderMob {
             .add(Attributes.MOVEMENT_SPEED, 0.25D)
             .add(Attributes.ATTACK_DAMAGE, 4.0D)
             .add(Attributes.FOLLOW_RANGE, 32.0D);
+    }
+
+
+    @Override
+    // Define synchronized data for the PlayerBotEntity, including the skin property
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(SKIN, "oguzok"); 
+        builder.define(BOT_CLASS, "oguzok"); 
+    }
+
+    // Define a synchronized data accessor for the skin property of the PlayerBotEntity
+    private static final EntityDataAccessor<String> SKIN =
+        SynchedEntityData.defineId(PlayerBotEntity.class, EntityDataSerializers.STRING);
+
+    // Getter and setter for skin property
+    public void setSkin(String skin) {
+        this.entityData.set(SKIN, skin);
+    }
+
+    // Getter for skin property
+    public String getSkin() {
+        return this.entityData.get(SKIN);
+    }
+
+    // Define a synchronized data accessor for the class property of the PlayerBotEntity
+    private static final EntityDataAccessor<String> BOT_CLASS =
+        SynchedEntityData.defineId(PlayerBotEntity.class, EntityDataSerializers.STRING);
+
+    // Getter and setter for class property
+    public void setClass(String className) {
+        this.entityData.set(BOT_CLASS, className);
+    }
+
+    // Getter for class property
+    public String getClassName() {
+        return this.entityData.get(BOT_CLASS);
     }
 
 
@@ -138,9 +179,9 @@ public class PlayerBotEntity extends PathfinderMob {
         if (modePreliminary == BotMode.FOLLOW && mode == BotMode.STOP) {
             // Randomly select a message to broadcast
             String[] messages = {
-                "Yes, boss!",
-                "Yes, chief!",
-                "Yes, sir!"
+                "Ok",
+                "Done",
+                "Stopped"
             };
             String msg = messages[this.random.nextInt(messages.length)];
 

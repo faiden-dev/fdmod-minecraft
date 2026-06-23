@@ -8,13 +8,6 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 
 public class PlayerBotRenderer extends HumanoidMobRenderer<PlayerBotEntity, PlayerModel<PlayerBotEntity>> {
-    // Define the texture location for the PlayerBotEntity
-    private static final ResourceLocation TEXTURE =
-        ResourceLocation.fromNamespaceAndPath(
-            "fdmod",
-            "textures/skins/bot.png"
-        );
-
     // Constructor for the PlayerBotRenderer
     public PlayerBotRenderer(EntityRendererProvider.Context context) {
         super(
@@ -27,6 +20,9 @@ public class PlayerBotRenderer extends HumanoidMobRenderer<PlayerBotEntity, Play
     @Override
     // Return the texture location for the PlayerBotEntity
     public ResourceLocation getTextureLocation(PlayerBotEntity entity) {
-        return TEXTURE;
+        return ResourceLocation.fromNamespaceAndPath(
+            "fdmod",
+            "textures/skins/" + entity.getSkin() + ".png"
+        );
     }
 }

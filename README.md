@@ -35,7 +35,7 @@ GitHub: https://github.com/faiden-dev
 
 ### /bSpawn
 
-- Spawns a bot at the player's position.
+- "skin" - Spawns a bot at the player's position with the selected skin and behavior class.
 
 ### /bMode
 
@@ -45,7 +45,10 @@ GitHub: https://github.com/faiden-dev
 
 ### Commands list
 
-- /bSpawn
+- /bSpawn oguzok
+- /bSpawn pony1
+- /bSpawn pony2
+- /bSpawn pony3
 - /bMode follow
 - /bMode stop
 - /bMode attack
