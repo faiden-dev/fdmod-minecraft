@@ -35,20 +35,23 @@ GitHub: https://github.com/faiden-dev
 
 ### /bSpawn
 
-- "skin" - Spawns a bot at the player's position with the selected skin and behavior class.
+- "class" - Spawns a bot at the player's position with the selected skin and behavior class.
 
 ### /bMode
 
-- follow - Bot starts chasing the nearest player and follows them.
-- stop - Bot sends a chat message and stops all movement.
-- attack - Bot attacks the nearest mob.
+- "class" - Selects bot group.
+- "mode" - Sets bot behavior:
+  - follow - Bot starts chasing the nearest player and follows them.
+  - stop - Bot stops all movement and sends a chat message.
+  - attack - Bot attacks the nearest mob.
+
+### Class list
+
+- oguzok, pony1, pony2, pony3
 
 ### Commands list
 
-- /bSpawn oguzok
 - /bSpawn pony1
-- /bSpawn pony2
-- /bSpawn pony3
-- /bMode follow
-- /bMode stop
-- /bMode attack
+- /bMode pony1 follow
+- /bMode pony1 stop
+- /bMode pony1 attack

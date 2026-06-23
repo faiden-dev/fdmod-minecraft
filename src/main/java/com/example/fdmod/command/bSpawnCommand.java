@@ -11,8 +11,8 @@ import net.minecraft.server.level.ServerPlayer;
 
 public class bSpawnCommand {
 
-    // List of available bot skins
-    private static final String[] SKINS = {
+    // List of available bot classes
+    private static final String[] CLASSES = {
         "oguzok",
         "pony1",
         "pony2",
@@ -23,57 +23,55 @@ public class bSpawnCommand {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(
 
-            // Base command: /bSpawn
+            // Base command: /bSpawn <class>
             Commands.literal("bSpawn")
-            .then(
+                .then(
 
-                // Argument: skin selection for the bot
-                Commands.argument("skin", StringArgumentType.word())
+                    // Argument: class selection for the bot
+                    Commands.argument("class", StringArgumentType.word())
 
-                    // Tab completion for available skins
-                    .suggests((context, builder) -> {
-                        for (String skin : SKINS) {
-                            builder.suggest(skin);
-                        }
-                        return builder.buildFuture();
-                    })
+                        // Tab completion for available classes
+                        .suggests((context, builder) -> {
+                            for (String c : CLASSES) {
+                                builder.suggest(c);
+                            }
+                            return builder.buildFuture();
+                        })
 
-                    // Command execution logic
-                    .executes(context -> {
+                        // Command execution logic
+                        .executes(context -> {
 
-                        // Get player who executed the command
-                        ServerPlayer player = context.getSource().getPlayerOrException();
+                            // Get player who executed the command
+                            ServerPlayer player = context.getSource().getPlayerOrException();
 
-                        // Read selected skin argument
-                        String skin = StringArgumentType.getString(context, "skin");
+                            // Read selected class argument
+                            String className = StringArgumentType.getString(context, "class");
 
-                        // Create bot entity
-                        PlayerBotEntity bot = ModEntities.PLAYER_BOT.get().create(player.level());
+                            // Create bot entity
+                            PlayerBotEntity bot = ModEntities.PLAYER_BOT.get().create(player.level());
 
-                        // Apply selected skin to bot
-                        bot.setSkin(skin);
+                            // Apply class (skin + behavior group)
+                            bot.setSkin(className);
+                            bot.setClass(className);
 
-                        // Apply selected class to bot
-                        bot.setClass(skin); 
+                            // Spawn bot at player position
+                            bot.moveTo(
+                                player.getX(),
+                                player.getY(),
+                                player.getZ(),
+                                player.getYRot(),
+                                player.getXRot()
+                            );
 
-                        // Spawn bot at player position
-                        bot.moveTo(
-                            player.getX(),
-                            player.getY(),
-                            player.getZ(),
-                            player.getYRot(),
-                            player.getXRot()
-                        );
+                            // Assign owner to bot
+                            bot.setOwner(player);
 
-                        // Assign owner to bot
-                        bot.setOwner(player);
+                            // Add bot to world
+                            player.level().addFreshEntity(bot);
 
-                        // Add bot to world
-                        player.level().addFreshEntity(bot);
-
-                        return 1;
-                    })
-            )
+                            return 1;
+                        })
+                )
         );
     }
 }
