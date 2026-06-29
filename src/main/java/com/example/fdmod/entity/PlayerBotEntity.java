@@ -2,6 +2,7 @@ package com.example.fdmod.entity;
 
 import java.util.UUID;
 
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -10,7 +11,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.pathfinder.PathType;
-
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.EntityType;
@@ -82,6 +82,29 @@ public class PlayerBotEntity extends PathfinderMob {
     // Getter for class property
     public String getClassName() {
         return this.entityData.get(BOT_CLASS);
+    }
+
+    @Override
+    // Save additional data to the NBT tag for persistence
+    public void addAdditionalSaveData(CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+
+        tag.putString("Skin", getSkin());
+        tag.putString("BotClass", getClassName());
+    }
+
+    @Override
+    // Read additional save data from the NBT tag to restore the bot's state
+    public void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+
+        if (tag.contains("Skin")) {
+            setSkin(tag.getString("Skin"));
+        }
+
+        if (tag.contains("BotClass")) {
+            setClass(tag.getString("BotClass"));
+        }
     }
 
 

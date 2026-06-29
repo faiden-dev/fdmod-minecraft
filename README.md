@@ -40,18 +40,8 @@ GitHub: https://github.com/faiden-dev
 ### /bMode
 
 - "class" - Selects bot group.
+  - oguzok, pony1, pony2, pony3
 - "mode" - Sets bot behavior:
   - follow - Bot starts chasing the nearest player and follows them.
   - stop - Bot stops all movement and sends a chat message.
   - attack - Bot attacks the nearest mob.
-
-### Class list
-
-- oguzok, pony1, pony2, pony3
-
-### Commands list
-
-- /bSpawn pony1
-- /bMode pony1 follow
-- /bMode pony1 stop
-- /bMode pony1 attack
