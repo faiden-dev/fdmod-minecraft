@@ -14,5 +14,6 @@ public class CommandEvents {
     public static void onRegisterCommands(RegisterCommandsEvent event) {
         bSpawnCommand.register(event.getDispatcher());
         BotCommand.register(event.getDispatcher());
+        BotCommandTalk.register(event.getDispatcher());
     }
 }
