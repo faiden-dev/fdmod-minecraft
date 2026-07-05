@@ -48,6 +48,13 @@ TikTok: https://www.tiktok.com/@faiden_dev
 - "class" - Selects bot group.
 - "message" - Sends a message to the chosen bot class, which communicates with the AI socket server and displays the response.
 
+### /bLearn
+
+- "class" - Selects bot group.
+- "mode" - Sets learning behavior:
+  - walk - Starts walking training
+  - stop - Stops learning process
+
 ### "сlass" list
 
 - oguzok, pony1, pony2, pony3.

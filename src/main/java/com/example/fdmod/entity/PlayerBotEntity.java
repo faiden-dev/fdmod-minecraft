@@ -1,6 +1,7 @@
 package com.example.fdmod.entity;
 
 import java.util.UUID;
+import com.example.fdmod.learn.walk.startLearnWalk;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -21,8 +22,11 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.OpenDoorGoal;
 
-
 public class PlayerBotEntity extends PathfinderMob {
+
+    public startLearnWalk learnWalkInstance;
+    public boolean isLearningWalk = false;
+
     // Constructor for the PlayerBotEntity
     public PlayerBotEntity(EntityType<? extends PathfinderMob> entityType, Level level) {
         super(entityType, level);
@@ -38,6 +42,12 @@ public class PlayerBotEntity extends PathfinderMob {
         this.setPathfindingMalus(PathType.DAMAGE_CAUTIOUS, 1.0F);
     }
 
+    // Override the tick method to handle learning walk mode
+    public void runLearnWalk() {
+        this.getNavigation().stop();
+        this.getMoveControl().setWantedPosition(this.getX(), this.getY(), this.getZ(), 0.0D);
+    }
+
     // Define attributes for the PlayerBotEntity
     public static AttributeSupplier.Builder createAttributes() {
         return PathfinderMob.createMobAttributes()
@@ -46,7 +56,6 @@ public class PlayerBotEntity extends PathfinderMob {
             .add(Attributes.ATTACK_DAMAGE, 4.0D)
             .add(Attributes.FOLLOW_RANGE, 32.0D);
     }
-
 
     @Override
     // Define synchronized data for the PlayerBotEntity, including the skin property
@@ -143,6 +152,10 @@ public class PlayerBotEntity extends PathfinderMob {
     public void tick() {
         super.tick();
 
+        if (this.isLearningWalk) {
+            return;
+        }
+
         // Stop movement
         if (mode == BotMode.STOP) {
             this.getNavigation().stop();
@@ -235,5 +248,30 @@ public class PlayerBotEntity extends PathfinderMob {
                 this.getNavigation().moveTo(path, speed);
             }
         }
+    }
+
+
+    
+    // Start learning walk mode
+    public void startLearnWalk() {
+        // Kill old scheduler if exists
+        if (this.learnWalkInstance != null && this.learnWalkInstance.runner != null) {
+            this.learnWalkInstance.runner.forceKill();
+        }
+        
+        this.isLearningWalk = true;
+        this.learnWalkInstance = new startLearnWalk(this);
+    }
+
+    // Stop learning walk mode
+    public void stopLearnWalk() {
+        // Kill active scheduler
+        if (this.learnWalkInstance != null && this.learnWalkInstance.runner != null) {
+            this.learnWalkInstance.runner.forceKill();
+        }
+        
+        this.isLearningWalk = false;
+        this.learnWalkInstance = null;
+        this.setMode(BotMode.STOP);
     }
 }

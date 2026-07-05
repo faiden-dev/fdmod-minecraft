@@ -3,5 +3,6 @@ package com.example.fdmod.entity;
 public enum BotMode {
     STOP,
     FOLLOW,
-    ATTACK
+    ATTACK,
+    LEARN_WALK
 }
